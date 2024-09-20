@@ -8,6 +8,8 @@ import Filtering from './Components/Filtering';
 import FilterSecond from './Components/FilterSecond';
 import FilterThird from './Components/FilterThird';
 import FilterFour from './Components/FilterFour';
+import Validation from './Components/Validation';
+
 
 function App() {
   return (
@@ -19,7 +21,9 @@ function App() {
     {/* <Filtering/> */}
     {/* <FilterSecond/> */}
     {/* <FilterThird/> */}
-    <FilterFour/>
+    {/* <FilterFour/> */}
+    <Validation/>
+    
     </div>
   );
 }

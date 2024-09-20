@@ -33,16 +33,25 @@ const FilterSecond = () => {
 
 
 
-    let handleChange = (age) => {
+    // let handleChange = (age) => {
 
-        const num = Number(age)
+    //     const num = Number(age)
 
-        const FilterData = items.filter(item => item.age === num)
+    //     const FilterData = items.filter(item => item.age === num)
+    //     console.log(typeof(FilterData));
+
+    //     setValue(FilterData)
+    // }
+
+    let handleChange = (ages) => {
+
+        // const num = Number(age)
+
+        const FilterData = items.filter(item => item.age === Number(ages))
         console.log(typeof(FilterData));
 
         setValue(FilterData)
     }
-
 
     return (
         <div>
