@@ -1,97 +1,69 @@
-// import axios from 'axios'
-// import React, { useEffect, useState } from 'react'
-
-// const ApiCall = () => {
-
-//   let [value, setValue] = useState([])
-
-
-//   useEffect(() => {
-//     axios.get('https://jsonplaceholder.typicode.com/posts')
-//       .then(res => setValue(res.data))
-//       .then(error => console.log('fetching error', error))
-//   }, [])
-
-//   return (
-//     <div>
-//       {value.map((x) => (
-//         <h1>{x.title}</h1>
-//       ))}
-//     </div>
-//   )
-// }
-
-// export default ApiCall
-
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Paper from '@mui/material/Paper';
-import InputBase from '@mui/material/InputBase';
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 
 const ApiCall = () => {
-    const [songs, setSongs] = useState([]);
-    const [filteredSongs, setFilteredSongs] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
 
-    useEffect(() => {
-        // Function to fetch data from API using Axios
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('https://cms.samespace.com/items/songs');
-                setSongs(response.data.data); // Update songs state with API data
-                setFilteredSongs(response.data.data); // Initialize filtered songs with all songs
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
+  let [value, setValue] = useState([])
 
-        fetchData(); // Call the fetch data function when component mounts
-    }, []);
 
-    // Handle input change for filtering
-    const handleChange = (event) => {
-        const searchTerm = event.target.value;
-        setSearchTerm(searchTerm);
+  useEffect(() => {
+    axios.get('https://jsonplaceholder.typicode.com/posts')
+      .then(res => setValue(res.data))
+      .catch(error => console.log('fetching error', error))
+  }, [])
 
-        const filteredData = songs.filter((song) =>
-            song.name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        setFilteredSongs(filteredData);
-    };
+  return (
+    <div>
+      {value.map((x) => (
+        <h1>{x.title}</h1>
+      ))}
+    </div>
+  )
+}
 
-    return (
-        <div>
-            <Paper
-                component="form"
-                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '100%', backgroundColor: '#333' }}
-            >
-                <InputBase
-                    sx={{ ml: 1, flex: 1, color: 'rgb(178 177 177)' }}
-                    placeholder="Search Songs by Name"
-                    value={searchTerm}
-                    onChange={handleChange}
-                />
-                <IconButton type="submit" sx={{ p: '10px', color: 'rgb(178 177 177)' }} aria-label="search">
-                    <SearchIcon />
-                </IconButton>
-            </Paper>
+export default ApiCall
 
-            <ul style={{ listStyleType: 'none', padding: 0 }}>
-                {filteredSongs.map((song) => (
-                    <li key={song.id} style={{ marginBottom: '10px' }}>
-                        <div>Name: {song.name}</div>
-                        <div>Artist: {song.artist}</div>
-                        <div>URL: {song.url}</div>
-                        {/* Add more details as needed */}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-};
 
-export default ApiCall;
+//Explanation on above code
+
+// 1)Imports:
+
+// We import axios for making HTTP requests and React along with useEffect and useState from the React library.
+
+
+// 2)State Setup:
+
+// We create a state variable called value using useState. This will hold the data we get from the API, and it starts as an empty array.
+
+
+// 3)Fetching Data:
+
+// Inside the useEffect hook, which runs after the component mounts, we use axios.get to make a GET request to the API endpoint https://jsonplaceholder.typicode.com/posts.
+// If the request is successful, we set the value state to the data received from the API using setValue(res.data).
+// If there's an error during fetching, we log the error to the console.
+
+
+// 4)Rendering:
+
+// In the return statement, we map over the value array, and for each item in the array, we create an <h1> element to display the title of each post.
+
+
+// 5)Export:
+
+// Finally, we export the ApiCall component so it can be used in other parts of the application.
+
+
+// Summary:-
+// All the data fetched from the API is stored in res.data.
+// The variable value will hold the contents of res.data after you call setValue(res.data).
+//The "res" parameter represents the response object that Axios receives from the API.
+//We use res as a parameter to capture the response object from the Axios request, allowing us to access the data returned from the API.
+
+
+
+
+
+
+
+
 
