@@ -10,6 +10,7 @@ import FilterThird from './Components/FilterThird';
 import FilterFour from './Components/FilterFour';
 import Validation from './Components/Validation';
 import AddNew from './Components/AddNew';
+import AddNewApi from './Components/AddNewAPI';
 
 
 function App() {
@@ -24,7 +25,8 @@ function App() {
     {/* <FilterThird/> */}
     {/* <FilterFour/> */}
     {/* <Validation/> */}
-    <AddNew/>
+    {/* <AddNew/> */}
+    <AddNewApi/>
     </div>
   );
 }

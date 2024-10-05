@@ -1,121 +1,140 @@
-import React, { useState } from 'react';
-import axios from 'axios'; // Import axios
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const AddNewApi = () => {
-    const [show, setShow] = useState(false);
-    
-    const [name, setName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
+    const [data, setData] = useState([]); // State for existing and new data
+    const [userId, setUserId] = useState('');
+    const [id, setId] = useState('');
+    const [title, setTitle] = useState('');
+    const [body, setBody] = useState('');
 
-    const [store, setStore] = useState([]); 
+    // Fetch existing data from the API
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
+                setData(response.data); // Store fetched data in state
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
 
-    const [nameError, setNameError] = useState('');
-    const [lastNameError, setLastNameError] = useState('');
-    const [emailError, setEmailError] = useState('');
+        fetchData();
+    }, []);
 
-    // Function to handle form submission
+    // Handle form submission to add new data
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        const newPost = {
+            userId,
+            id,
+            title,
+            body
+        };
 
-        // Validation logic
-        if (name === '') {
-            setNameError('Name is required');
-            return;
-        } else {
-            setNameError('');
-        }
-
-        if (lastName === '') {
-            setLastNameError('Last name is required');
-            return;
-        } else {
-            setLastNameError('');
-        }
-
-        if (email === '' || !email.includes('@')) {
-            setEmailError('Valid email is required');
-            return;
-        } else {
-            setEmailError('');
-        }
-
-        const newData = { name, lastName, email };
-
-        // Send the data to the API using axios
         try {
-            const response = await axios.post('YOUR_API_ENDPOINT_URL', newData);
+            // Send the new post data to the API
+            const response = await axios.post('https://jsonplaceholder.typicode.com/posts', newPost);
 
-            if (response.status === 201 || response.status === 200) {
-                const result = response.data;
-                setStore((prev) => [...prev, result]); // Add the new data to the local state
+            // Add the new post to the local state
+            setData((prevData) => [...prevData, response.data]);
 
-                // Clear input fields after successful submission
-                setName('');
-                setLastName('');
-                setEmail('');
-                setShow(false);
-                alert('Successfully submitted');
-            } else {
-                alert('Failed to submit data');
-            }
+            // Clear the input fields
+            setUserId('');
+            setId('');
+            setTitle('');
+            setBody('');
         } catch (error) {
-            console.error('Error submitting data:', error);
-            alert('An error occurred while submitting the data.');
+            console.error('Error adding data:', error);
+        }
+    };
+
+    // Handle delete action
+    const handleDelete = async (postId) => {
+        try {
+            // Send delete request to the API
+            await axios.delete(`https://jsonplaceholder.typicode.com/posts/${postId}`);
+
+            // Remove the deleted post from the local state
+            setData((prevData) => prevData.filter((post) => post.id !== postId));
+
+            alert('Post deleted successfully!');
+        } catch (error) {
+            console.error('Error deleting post:', error);
         }
     };
 
     return (
         <div>
-            <div>
-                {show && (
-                    <form onSubmit={handleSubmit}>
-                        <div>
-                            <input
-                                type="text"
-                                placeholder="First Name"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                            />
-                            {nameError && <p style={{ color: 'red' }}>{nameError}</p>}
-                        </div>
-                        <div>
-                            <input
-                                type="text"
-                                placeholder="Last Name"
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                            />
-                            {lastNameError && <p style={{ color: 'red' }}>{lastNameError}</p>}
-                        </div>
-                        <div>
-                            <input
-                                type="email"
-                                placeholder="Email Address"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                            {emailError && <p style={{ color: 'red' }}>{emailError}</p>}
-                        </div>
-                        <button type="submit">Submit</button>
-                    </form>
-                )}
-                <button onClick={() => setShow(true)}>Add New</button>
-            </div>
-            <div>
-                <table>
-                    <tbody>
-                        {store.map((data, index) => (
-                            <tr key={index}>
-                                <td>{data.name} {data.lastName} {data.email}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            <h2>Post Data</h2>
+
+            {/* Form to add new data */}
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <input
+                        type="number"
+                        placeholder="User ID"
+                        value={userId}
+                        onChange={(e) => setUserId(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <input
+                        type="number"
+                        placeholder="ID"
+                        value={id}
+                        onChange={(e) => setId(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <textarea
+                        placeholder="Body"
+                        value={body}
+                        onChange={(e) => setBody(e.target.value)}
+                    />
+                </div>
+                <button type="submit">Add Post</button>
+            </form>
+
+            {/* Display data in a table */}
+            <table border="1" style={{ marginTop: '20px', width: '100%' }}>
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Body</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.map((post) => (
+                        <tr key={post.id}>
+                            <td>{post.userId}</td>
+                            <td>{post.id}</td>
+                            <td>{post.title}</td>
+                            <td>{post.body}</td>
+                            <td>
+                                <button onClick={() => handleDelete(post.id)}>Delete</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };
 
 export default AddNewApi;
+
+
 
