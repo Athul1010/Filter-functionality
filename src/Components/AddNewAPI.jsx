@@ -1,11 +1,14 @@
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const AddNewApi = () => {
     const [data, setData] = useState([]); // State for existing and new data
+
     const [userId, setUserId] = useState('');
     const [id, setId] = useState('');
     const [title, setTitle] = useState('');
+
     const [body, setBody] = useState('');
 
     // Fetch existing data from the API
@@ -22,10 +25,11 @@ const AddNewApi = () => {
         fetchData();
     }, []);
 
+
     // Handle form submission to add new data
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         const newPost = {
             userId,
             id,
@@ -45,6 +49,8 @@ const AddNewApi = () => {
             setId('');
             setTitle('');
             setBody('');
+
+            alert('Post added successfully!');
         } catch (error) {
             console.error('Error adding data:', error);
         }
@@ -135,6 +141,9 @@ const AddNewApi = () => {
 };
 
 export default AddNewApi;
+
+
+
 
 
 
