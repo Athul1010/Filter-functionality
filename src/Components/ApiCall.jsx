@@ -1,27 +1,27 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+// import axios from 'axios'
+// import React, { useEffect, useState } from 'react'
 
-const ApiCall = () => {
+// const ApiCall = () => {
 
-  let [value, setValue] = useState([])
+//   let [value, setValue] = useState([])
 
 
-  useEffect(() => {
-    axios.get('https://jsonplaceholder.typicode.com/posts')
-      .then(res => setValue(res.data))
-      .catch(error => console.log('fetching error', error))
-  }, [])
+//   useEffect(() => {
+//     axios.get('https://jsonplaceholder.typicode.com/posts')
+//       .then(res => setValue(res.data))
+//       .catch(error => console.log('fetching error', error))
+//   }, [])
 
-  return (
-    <div>
-      {value.map((x) => (
-        <h1>{x.title}</h1>
-      ))}
-    </div>
-  )
-}
+//   return (
+//     <div>
+//       {value.map((x) => (
+//         <h1>{x.title}</h1>
+//       ))}
+//     </div>
+//   )
+// }
 
-export default ApiCall
+// export default ApiCall
 
 
 //Explanation on above code
@@ -67,3 +67,46 @@ export default ApiCall
 
 
 
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+
+const ApiCall = () => {
+
+  let [value, setValue] = useState([])
+//"forecast":{"forecastday":[{"date":"2025-01-09","date_epoch":1736380800
+
+
+useEffect(() => {
+  axios.get('https://jsonplaceholder.typicode.com/posts')
+    .then(res => {
+      if (res.status === 200) {
+        console.log('Data fetched successfully!');
+        setValue(res.data);
+      }
+    })
+    .catch(error => {
+      if (error.response.status === 404) {
+        console.log('Error: Data not found!');
+      } else if (error.response.status === 500) {
+        console.log('Server Error! Try again later.');
+      }
+    });
+
+}, []);
+
+  useEffect(() => {
+    axios.get('http://api.weatherapi.com/v1/forecast.json?key=44eed0b98e1c4b989c930643241311&q=India&days=1&aqi=no&alerts=no')
+      .then(res => setValue(res.data.forecast.forecastday))
+      .catch(error => console.log('fetching error', error))
+  }, [])
+
+  return (
+    <div>
+      {value.map((x) => (
+        <h1>{x.date}</h1>
+      ))}
+    </div>
+  )
+}
+
+export default ApiCall

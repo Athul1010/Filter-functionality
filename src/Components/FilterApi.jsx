@@ -1,40 +1,59 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+// import axios from 'axios';
+// import React, { useEffect, useState } from 'react'
 
-const FilterApi = () => {
+// const FilterApi = () => {
+//   console.log('Component rendered!');
+//   const [data, setData] = useState([]);
+//   const [search, setSearch] = useState([]);
 
-  let [value, setValue] = useState([]);
-  let [search, setSearch] = useState([]);
+//   useEffect(()=>{
+//     axios.get('https://jsonplaceholder.typicode.com/posts')
+//     .then(res=>{
+//       setData(res.data);
+//       setSearch(res.data);
+//     })
+//     .catch(error=>console.log('fetch data error',error))
+//   },[])
 
-  useEffect(()=>{
-    axios.get('https://jsonplaceholder.typicode.com/posts')
-    .then(res => {
-      setValue(res.data)
-      setSearch(res.data)
-    })
-    .catch(error=>console.log('fetching error',error))
-  },[])
+//   let handleFilter = (element) =>{
+//     console.log('Filtering data...');
+//     let filtering = data.filter((x)=>x.title.includes(element)|| x.id === Number(element))
+//     setSearch(filtering)
+//   }
 
-  let handleSearch = (element) =>{
-    let result = value.filter((x)=>x.title.includes(element)|| x.id === Number(element))
-    setSearch(result)
-  }
 
-  return (
-    <div>
-      <h1>Filter Functionality</h1>
-      <div>
-        <label htmlFor="">Search: </label>
-        <input type="text" placeholder='Type here' onChange={(e)=>handleSearch(e.target.value)}/>
-      </div>
-      {search.map((x,index)=>(
-        <div key={index}>
-          <h2>{x.title}</h2>
-          <p>{x.id}</p>
-        </div>
-      ))}
-    </div>
-  )
-}
+//   return (
+//     <div>
+//       <div>
+//         <input type="text" placeholder='Search here...' onChange={(e)=>handleFilter(e.target.value)} />
+//       </div>
+//       <table>
+//         <thead>
+//           <tr>
+//             <th>ID</th>
+//             <th>Title</th>
+//             <th>Description</th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//         {search.map((data,index)=>(
+//           <tr key={index}>
+//             <td>{data.id}</td>
+//             <td>{data.title}</td>
+//             <td>{data.body}</td>
+//           </tr>
+//         ))}
+//         </tbody>
+//       </table>
+//     </div>
+//   )
+// }
 
-export default FilterApi
+// export default FilterApi
+
+
+
+
+
+
+

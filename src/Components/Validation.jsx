@@ -122,10 +122,13 @@ const Validation = () => {
             setNameError('')
         }
 
-        if (email=='' || !email.includes('@')) {
-            setEmailError('valid email with @ is required')
+        if (email === '') {
+            setEmailError('Email is needed');
+        } else if (!/^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/.test(email)) {
+            setEmailError('A valid email with "@" is required');
+            
         } else {
-            setEmailError('')
+            setEmailError(''); // Clear error if email is valid
         }
 
         if (password=='') {
@@ -156,7 +159,7 @@ const Validation = () => {
           </div>
           <div>
             <label htmlFor="">Email:</label>
-            <input type="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
+            <input type="text" value={email} onChange={(e)=>setEmail(e.target.value)}/>
             {emailError&&<p style={{color: 'red'}}>{emailError}</p>}
           </div>
           <div>

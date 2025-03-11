@@ -1,0 +1,8 @@
+.card-wrap{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+.card-set{
+    border: 1px solid black;
+}

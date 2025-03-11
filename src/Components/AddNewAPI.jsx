@@ -1,149 +1,210 @@
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+const AddNewAPI = () => {
 
-const AddNewApi = () => {
-    const [data, setData] = useState([]); // State for existing and new data
+    const [data, setData] = useState([])
 
-    const [userId, setUserId] = useState('');
-    const [id, setId] = useState('');
-    const [title, setTitle] = useState('');
+    const [userId, setUserId] = useState('')
+    const [id, setId] = useState('')
+    const [title, setTitle] = useState('')
+    const [body, setBody] = useState('')
 
-    const [body, setBody] = useState('');
+    // useEffect(()=>{
+    //     const fetchData = async() =>{
+    //         try {
+    //             const response = await axios.get('https://jsonplaceholder.typicode.com/posts')
+    //             setData(response.data)
+    //         } catch (error) {
+    //             console.error('fetching error',error)
+    //         }
+    //     };
+    //     fetchData()
+    // },[])
 
-    // Fetch existing data from the API
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
-                setData(response.data); // Store fetched data in state
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
+        axios.get('https://jsonplaceholder.typicode.com/posts')
+            .then(response => setData(response.data))
+            .catch(error => console.log('fetching error', error))
+    }, [])
 
-        fetchData();
-    }, []);
-
-
-    // Handle form submission to add new data
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const newPost = {
-            userId,
-            id,
-            title,
-            body
-        };
-
-        try {
-            // Send the new post data to the API
-            const response = await axios.post('https://jsonplaceholder.typicode.com/posts', newPost);
-
-            // Add the new post to the local state
-            setData((prevData) => [...prevData, response.data]);
-
-            // Clear the input fields
-            setUserId('');
-            setId('');
-            setTitle('');
-            setBody('');
-
-            alert('Post added successfully!');
-        } catch (error) {
-            console.error('Error adding data:', error);
+        const newData = {
+            userId, id, title, body
         }
-    };
-
-    // Handle delete action
-    const handleDelete = async (postId) => {
         try {
-            // Send delete request to the API
-            await axios.delete(`https://jsonplaceholder.typicode.com/posts/${postId}`);
-
-            // Remove the deleted post from the local state
-            setData((prevData) => prevData.filter((post) => post.id !== postId));
-
-            alert('Post deleted successfully!');
+            const response = await axios.post('https://jsonplaceholder.typicode.com/posts', newData)
+            setData(prev => [...prev, response.data])
+            alert('Successfully Added')
         } catch (error) {
-            console.error('Error deleting post:', error);
+            console.error('Not Added', error)
         }
-    };
+    }
+
+    
+
+    const handleDelete = (id) => {
+        try {
+            axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`)
+            setData(data.filter((x)=>x.id !== id))
+        } catch (error) {
+            console.log('not deleted',error);
+            
+        }
+    }
 
     return (
         <div>
-            <h2>Post Data</h2>
-
-            {/* Form to add new data */}
             <form onSubmit={handleSubmit}>
                 <div>
-                    <input
-                        type="number"
-                        placeholder="User ID"
-                        value={userId}
-                        onChange={(e) => setUserId(e.target.value)}
-                    />
+                    <input type="number" placeholder='User ID' value={userId} onChange={(e) => setUserId(e.target.value)} />
                 </div>
                 <div>
-                    <input
-                        type="number"
-                        placeholder="ID"
-                        value={id}
-                        onChange={(e) => setId(e.target.value)}
-                    />
+                    <input type="number" placeholder='Id' value={id} onChange={(e) => setId(e.target.value)} />
                 </div>
                 <div>
-                    <input
-                        type="text"
-                        placeholder="Title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
+                    <input type="text" placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} />
                 </div>
                 <div>
-                    <textarea
-                        placeholder="Body"
-                        value={body}
-                        onChange={(e) => setBody(e.target.value)}
-                    />
+                    <textarea name="" id="" placeholder='Body' value={body} onChange={(e) => setBody(e.target.value)}></textarea>
                 </div>
-                <button type="submit">Add Post</button>
+                <button>Submit</button>
             </form>
-
-            {/* Display data in a table */}
-            <table border="1" style={{ marginTop: '20px', width: '100%' }}>
+            <table border='1'>
                 <thead>
                     <tr>
                         <th>User ID</th>
-                        <th>ID</th>
+                        <th>Id</th>
                         <th>Title</th>
                         <th>Body</th>
-                        <th>Actions</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((post) => (
-                        <tr key={post.id}>
-                            <td>{post.userId}</td>
-                            <td>{post.id}</td>
-                            <td>{post.title}</td>
-                            <td>{post.body}</td>
+                    {data.map((x) => (
+                        <tr key={x.id}>
+                            <td>{x.userId}</td>
+                            <td>{x.id}</td>
+                            <td>{x.title}</td>
+                            <td>{x.body}</td>
                             <td>
-                                <button onClick={() => handleDelete(post.id)}>Delete</button>
+                                <button onClick={() => handleDelete(x.id)}>Delete</button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
         </div>
-    );
-};
+    )
+}
 
-export default AddNewApi;
-
-
+export default AddNewAPI
 
 
+// import axios from 'axios'
+// import React, { useEffect, useState } from 'react'
 
+// const AddNewAPI = () => {
+//     const [data, setData] = useState([])
 
+//     const [userId, setUserId] = useState('')
+//     const [id, setId] = useState('')
+//     const [title, setTitle] = useState('')
+//     const [body, setBody] = useState('')
+
+//     // 🔹 GET Request (Fetching Data)
+//     useEffect(() => {
+//         axios.get('https://jsonplaceholder.typicode.com/posts')
+//             .then(res => {
+//                 if (res.status === 200) {  // ✅ Standard success response
+//                     setData(res.data);
+//                 } else {
+//                     console.error('Unexpected Status:', res.status);
+//                 }
+//             })
+//             .catch(error => {
+//                 console.error('Fetching error:', error);
+//             });
+//     }, []);
+
+//     // 🔹 POST Request (Adding New Data)
+//     const handleSubmit = async (e) => {
+//         e.preventDefault();
+//         const newData = { userId, id, title, body };
+
+//         try {
+//             const response = await axios.post('https://jsonplaceholder.typicode.com/posts', newData);
+//             if (response.status === 201) {  // ✅ Standard success response for creating a resource
+//                 setData(prev => [...prev, response.data]);
+//                 alert('Successfully Added');
+//             } else {
+//                 console.error('Unexpected Status:', response.status);
+//             }
+//         } catch (error) {
+//             console.error('Not Added:', error);
+//         }
+//     };
+
+//     // 🔹 DELETE Request (Deleting Data)
+//     const handleDelete = async (id) => {
+//         try {
+//             const response = await axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`);
+//             if (response.status === 200 || response.status === 204) {  // ✅ Standard success responses for DELETE
+//                 setData(data.filter(x => x.id !== id));
+//                 alert('Successfully Deleted');
+//             } else {
+//                 console.error('Unexpected Status:', response.status);
+//             }
+//         } catch (error) {
+//             console.error('Not Deleted:', error);
+//         }
+//     };
+
+//     return (
+//         <div>
+//             <form onSubmit={handleSubmit}>
+//                 <div>
+//                     <input type="number" placeholder='User ID' value={userId} onChange={(e) => setUserId(e.target.value)} />
+//                 </div>
+//                 <div>
+//                     <input type="number" placeholder='Id' value={id} onChange={(e) => setId(e.target.value)} />
+//                 </div>
+//                 <div>
+//                     <input type="text" placeholder='Title' value={title} onChange={(e) => setTitle(e.target.value)} />
+//                 </div>
+//                 <div>
+//                     <textarea placeholder='Body' value={body} onChange={(e) => setBody(e.target.value)}></textarea>
+//                 </div>
+//                 <button>Submit</button>
+//             </form>
+
+//             <table border='1'>
+//                 <thead>
+//                     <tr>
+//                         <th>User ID</th>
+//                         <th>Id</th>
+//                         <th>Title</th>
+//                         <th>Body</th>
+//                         <th>Action</th>
+//                     </tr>
+//                 </thead>
+//                 <tbody>
+//                     {data.map((x) => (
+//                         <tr key={x.id}>
+//                             <td>{x.userId}</td>
+//                             <td>{x.id}</td>
+//                             <td>{x.title}</td>
+//                             <td>{x.body}</td>
+//                             <td>
+//                                 <button onClick={() => handleDelete(x.id)}>Delete</button>
+//                             </td>
+//                         </tr>
+//                     ))}
+//                 </tbody>
+//             </table>
+//         </div>
+//     )
+// }
+
+// export default AddNewAPI;
